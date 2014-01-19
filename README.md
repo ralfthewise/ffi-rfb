@@ -51,9 +51,9 @@ Finally, build on the above and create something awesome!
 
 1. Functionality provided by libvncserver that is not included with this wrapper:
 
-    rftLogProc - ffi doesn't support varargs in callbacks.  see https://github.com/ffi/ffi/issues/161
+    **rfbLogProc** - ffi doesn't support varargs in callbacks.  see https://github.com/ffi/ffi/issues/161
 
-    defaultNewClientHook - I was having trouble getting ffi to match this method definition.  If someone can get it working, please submit a pull request.
+    **defaultNewClientHook** - I was having trouble getting ffi to match this method definition.  If someone can get it working, please submit a pull request.
 
 2. Platform support - this wrapper was built and tested on 64bit linux.  it should work on any 64bit operating system, but I haven't tested it.
 
