@@ -16,3 +16,8 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+vendor/bundle
+swig-build/generated_types.i
+swig-build/generated_types
+swig-build/rfb.xml
