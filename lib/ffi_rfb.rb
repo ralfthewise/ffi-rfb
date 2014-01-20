@@ -552,10 +552,10 @@ module FfiRfb
   end
   MAXPWLEN = 8
   CHALLENGESIZE = 16
-  attach_function :rfbEncryptAndStorePasswd, [ :string, :string ], :int
-  attach_function :rfbDecryptPasswdFromFile, [ :string ], :string
+  attach_function :rfbEncryptAndStorePasswd, [ :pointer, :pointer ], :int
+  attach_function :rfbDecryptPasswdFromFile, [ :pointer ], :pointer
   attach_function :rfbRandomBytes, [ :pointer ], :void
-  attach_function :rfbEncryptBytes, [ :pointer, :string ], :void
+  attach_function :rfbEncryptBytes, [ :pointer, :pointer ], :void
 
   #include "rfb/rfb.h"
   RFB_CLIENT_ACCEPT = 0
@@ -569,10 +569,10 @@ module FfiRfb
   callback(:rfbKbdAddEventProcPtr, [ :char, :uint, :pointer ], :void)
   callback(:rfbKbdReleaseAllKeysProcPtr, [ :pointer ], :void)
   callback(:rfbPtrAddEventProcPtr, [ :int, :int, :int, :pointer ], :void)
-  callback(:rfbSetXCutTextProcPtr, [ :string, :int, :pointer ], :void)
+  callback(:rfbSetXCutTextProcPtr, [ :pointer, :int, :pointer ], :void)
   callback(:rfbGetCursorProcPtr, [ :pointer ], :pointer)
   callback(:rfbSetTranslateFunctionProcPtr, [ :pointer ], :char)
-  callback(:rfbPasswordCheckProcPtr, [ :pointer, :string, :int ], :char)
+  callback(:rfbPasswordCheckProcPtr, [ :pointer, :pointer, :int ], :char)
   callback(:rfbNewClientHookPtr, [ :pointer ], :int)
   callback(:rfbDisplayHookPtr, [ :pointer ], :void)
   callback(:rfbDisplayFinishedHookPtr, [ :pointer, :int ], :void)
@@ -581,7 +581,7 @@ module FfiRfb
   callback(:rfbSetSingleWindowProcPtr, [ :pointer, :int, :int ], :void)
   callback(:rfbSetServerInputProcPtr, [ :pointer, :int ], :void)
   callback(:rfbFileTransferPermitted, [ :pointer ], :int)
-  callback(:rfbSetTextChat, [ :pointer, :int, :string ], :void)
+  callback(:rfbSetTextChat, [ :pointer, :int, :pointer ], :void)
   class RfbColourMapData < FFI::Union
     layout(
            :bytes, :pointer,
@@ -924,7 +924,7 @@ module FfiRfb
     end
 
   end
-  callback(:rfbTranslateFnType, [ :string, :pointer, :pointer, :string, :string, :int, :int, :int ], :void)
+  callback(:rfbTranslateFnType, [ :pointer, :pointer, :pointer, :pointer, :pointer, :int, :int, :int ], :void)
   callback(:ClientGoneHookPtr, [ :pointer ], :void)
   class RfbFileTransferData < FFI::Struct
     layout(
@@ -1104,17 +1104,17 @@ module FfiRfb
   attach_function :rfbShutdownSockets, [ :pointer ], :void
   attach_function :rfbDisconnectUDPSock, [ :pointer ], :void
   attach_function :rfbCloseClient, [ :pointer ], :void
-  attach_function :rfbReadExact, [ :pointer, :string, :int ], :int
-  attach_function :rfbReadExactTimeout, [ :pointer, :string, :int, :int ], :int
-  attach_function :rfbPeekExactTimeout, [ :pointer, :string, :int, :int ], :int
-  attach_function :rfbWriteExact, [ :pointer, :string, :int ], :int
+  attach_function :rfbReadExact, [ :pointer, :pointer, :int ], :int
+  attach_function :rfbReadExactTimeout, [ :pointer, :pointer, :int, :int ], :int
+  attach_function :rfbPeekExactTimeout, [ :pointer, :pointer, :int, :int ], :int
+  attach_function :rfbWriteExact, [ :pointer, :pointer, :int ], :int
   attach_function :rfbCheckFds, [ :pointer, :long ], :int
-  attach_function :rfbConnect, [ :pointer, :string, :int ], :int
-  attach_function :rfbConnectToTcpAddr, [ :string, :int ], :int
+  attach_function :rfbConnect, [ :pointer, :pointer, :int ], :int
+  attach_function :rfbConnectToTcpAddr, [ :pointer, :int ], :int
   attach_function :rfbListenOnTCPPort, [ :int, :in_addr_t ], :int
-  attach_function :rfbListenOnTCP6Port, [ :int, :string ], :int
+  attach_function :rfbListenOnTCP6Port, [ :int, :pointer ], :int
   attach_function :rfbListenOnUDPPort, [ :int, :in_addr_t ], :int
-  attach_function :rfbStringToAddr, [ :string, :pointer ], :int
+  attach_function :rfbStringToAddr, [ :pointer, :pointer ], :int
   attach_function :rfbSetNonBlocking, [ :int ], :char
   attach_function :rfbClientListInit, [ :pointer ], :void
   attach_function :rfbGetClientIterator, [ :pointer ], :pointer
@@ -1125,29 +1125,29 @@ module FfiRfb
   attach_function :rfbNewClientConnection, [ :pointer, :int ], :void
   attach_function :rfbNewClient, [ :pointer, :int ], :pointer
   attach_function :rfbNewUDPClient, [ :pointer ], :pointer
-  attach_function :rfbReverseConnection, [ :pointer, :string, :int ], :pointer
+  attach_function :rfbReverseConnection, [ :pointer, :pointer, :int ], :pointer
   attach_function :rfbClientConnectionGone, [ :pointer ], :void
   attach_function :rfbProcessClientMessage, [ :pointer ], :void
-  attach_function :rfbClientConnFailed, [ :pointer, :string ], :void
+  attach_function :rfbClientConnFailed, [ :pointer, :pointer ], :void
   attach_function :rfbNewUDPConnection, [ :pointer, :int ], :void
   attach_function :rfbProcessUDPInput, [ :pointer ], :void
   attach_function :rfbSendFramebufferUpdate, [ :pointer, :pointer ], :char
   attach_function :rfbSendRectEncodingRaw, [ :pointer, :int, :int, :int, :int ], :char
   attach_function :rfbSendUpdateBuf, [ :pointer ], :char
-  attach_function :rfbSendServerCutText, [ :pointer, :string, :int ], :void
+  attach_function :rfbSendServerCutText, [ :pointer, :pointer, :int ], :void
   attach_function :rfbSendCopyRegion, [ :pointer, :pointer, :int, :int ], :char
   attach_function :rfbSendLastRectMarker, [ :pointer ], :char
   attach_function :rfbSendNewFBSize, [ :pointer, :int, :int ], :char
   attach_function :rfbSendSetColourMapEntries, [ :pointer, :int, :int ], :char
   attach_function :rfbSendBell, [ :pointer ], :void
-  attach_function :rfbProcessFileTransferReadBuffer, [ :pointer, :uint ], :string
+  attach_function :rfbProcessFileTransferReadBuffer, [ :pointer, :uint ], :pointer
   attach_function :rfbSendFileTransferChunk, [ :pointer ], :char
-  attach_function :rfbSendDirContent, [ :pointer, :int, :string ], :char
-  attach_function :rfbSendFileTransferMessage, [ :pointer, :uchar, :uchar, :uint, :uint, :string ], :char
-  attach_function :rfbProcessFileTransferReadBuffer, [ :pointer, :uint ], :string
+  attach_function :rfbSendDirContent, [ :pointer, :int, :pointer ], :char
+  attach_function :rfbSendFileTransferMessage, [ :pointer, :uchar, :uchar, :uint, :uint, :pointer ], :char
+  attach_function :rfbProcessFileTransferReadBuffer, [ :pointer, :uint ], :pointer
   attach_function :rfbProcessFileTransfer, [ :pointer, :uchar, :uchar, :uint, :uint ], :char
-  attach_function :rfbGotXCutText, [ :pointer, :string, :int ], :void
-  attach_function :rfbTranslateNone, [ :string, :pointer, :pointer, :string, :string, :int, :int, :int ], :void
+  attach_function :rfbGotXCutText, [ :pointer, :pointer, :int ], :void
+  attach_function :rfbTranslateNone, [ :pointer, :pointer, :pointer, :pointer, :pointer, :int, :int, :int ], :void
   attach_function :rfbSetTranslateFunction, [ :pointer ], :char
   attach_function :rfbSetClientColourMap, [ :pointer, :int, :int ], :char
   attach_function :rfbSetClientColourMaps, [ :pointer, :int, :int ], :void
@@ -1198,9 +1198,9 @@ module FfiRfb
   attach_function :rfbSendCursorShape, [ :pointer ], :char
   attach_function :rfbSendCursorPos, [ :pointer ], :char
   attach_function :rfbConvertLSBCursorBitmapOrMask, [ :int, :int, :pointer ], :void
-  attach_function :rfbMakeXCursor, [ :int, :int, :string, :string ], :pointer
-  attach_function :rfbMakeMaskForXCursor, [ :int, :int, :string ], :string
-  attach_function :rfbMakeMaskFromAlphaSource, [ :int, :int, :pointer ], :string
+  attach_function :rfbMakeXCursor, [ :int, :int, :pointer, :pointer ], :pointer
+  attach_function :rfbMakeMaskForXCursor, [ :int, :int, :pointer ], :pointer
+  attach_function :rfbMakeMaskFromAlphaSource, [ :int, :int, :pointer ], :pointer
   attach_function :rfbMakeXCursorFromRichCursor, [ :pointer, :pointer ], :void
   attach_function :rfbMakeRichCursorFromXCursor, [ :pointer, :pointer ], :void
   attach_function :rfbFreeCursor, [ :pointer ], :void
@@ -1216,14 +1216,14 @@ module FfiRfb
     )
   end
   attach_function :rfbDrawChar, [ :pointer, :pointer, :int, :int, :uchar, :uint ], :int
-  attach_function :rfbDrawString, [ :pointer, :pointer, :int, :int, :string, :uint ], :void
+  attach_function :rfbDrawString, [ :pointer, :pointer, :int, :int, :pointer, :uint ], :void
   attach_function :rfbDrawCharWithClip, [ :pointer, :pointer, :int, :int, :uchar, :int, :int, :int, :int, :uint, :uint ], :int
-  attach_function :rfbDrawStringWithClip, [ :pointer, :pointer, :int, :int, :string, :int, :int, :int, :int, :uint, :uint ], :void
-  attach_function :rfbWidthOfString, [ :pointer, :string ], :int
+  attach_function :rfbDrawStringWithClip, [ :pointer, :pointer, :int, :int, :pointer, :int, :int, :int, :int, :uint, :uint ], :void
+  attach_function :rfbWidthOfString, [ :pointer, :pointer ], :int
   attach_function :rfbWidthOfChar, [ :pointer, :uchar ], :int
   attach_function :rfbFontBBox, [ :pointer, :uchar, :pointer, :pointer, :pointer, :pointer ], :void
   attach_function :rfbWholeFontBBox, [ :pointer, :pointer, :pointer, :pointer, :pointer ], :void
-  attach_function :rfbLoadConsoleFont, [ :string ], :pointer
+  attach_function :rfbLoadConsoleFont, [ :pointer ], :pointer
   attach_function :rfbFreeFont, [ :pointer ], :void
   attach_function :rfbFillRect, [ :pointer, :int, :int, :int, :int, :uint ], :void
   attach_function :rfbDrawPixel, [ :pointer, :int, :int, :uint ], :void
@@ -1235,7 +1235,7 @@ module FfiRfb
   attach_function :rfbProcessArguments, [ :pointer, :pointer, :pointer ], :pointer
   attach_function :rfbProcessSizeArguments, [ :pointer, :pointer, :pointer, :pointer, :pointer ], :pointer
   attach_function :rfbLogEnable, [ :int ], :void
-  attach_function :rfbLogPerror, [ :string ], :void
+  attach_function :rfbLogPerror, [ :pointer ], :void
   attach_function :rfbScheduleCopyRect, [ :pointer, :int, :int, :int, :int, :int, :int ], :void
   attach_function :rfbScheduleCopyRegion, [ :pointer, :pointer, :int, :int ], :void
   attach_function :rfbDoCopyRect, [ :pointer, :int, :int, :int, :int, :int, :int ], :void
@@ -1250,13 +1250,13 @@ module FfiRfb
   attach_function :rfbEnableExtension, [ :pointer, :pointer, :pointer ], :char
   attach_function :rfbDisableExtension, [ :pointer, :pointer ], :char
   attach_function :rfbGetExtensionClientData, [ :pointer, :pointer ], :pointer
-  attach_function :rfbCheckPasswordByList, [ :pointer, :string, :int ], :char
+  attach_function :rfbCheckPasswordByList, [ :pointer, :pointer, :int ], :char
   attach_function :rfbGetScreen, [ :pointer, :pointer, :int, :int, :int, :int, :int ], :pointer
   attach_function :rfbInitServerWithPthreadsAndZRLE, [ :pointer ], :void
   attach_function :rfbShutdownServer, [ :pointer, :char ], :void
-  attach_function :rfbNewFramebuffer, [ :pointer, :string, :int, :int, :int, :int, :int ], :void
+  attach_function :rfbNewFramebuffer, [ :pointer, :pointer, :int, :int, :int, :int, :int ], :void
   attach_function :rfbScreenCleanup, [ :pointer ], :void
-  attach_function :rfbSetServerVersionIdentity, [ :pointer, :string, :varargs ], :void
+  attach_function :rfbSetServerVersionIdentity, [ :pointer, :pointer, :varargs ], :void
   attach_function :rfbStartOnHoldClient, [ :pointer ], :void
   attach_function :rfbRefuseOnHoldClient, [ :pointer ], :void
   attach_function :rfbRunEventLoop, [ :pointer, :long, :char ], :void
@@ -1264,9 +1264,9 @@ module FfiRfb
   attach_function :rfbIsActive, [ :pointer ], :char
   attach_function :rfbRegisterTightVNCFileTransferExtension, [  ], :void
   attach_function :rfbUnregisterTightVNCFileTransferExtension, [  ], :void
-  attach_function :messageNameServer2Client, [ :uint, :string, :int ], :string
-  attach_function :messageNameClient2Server, [ :uint, :string, :int ], :string
-  attach_function :encodingName, [ :uint, :string, :int ], :string
+  attach_function :messageNameServer2Client, [ :uint, :pointer, :int ], :pointer
+  attach_function :messageNameClient2Server, [ :uint, :pointer, :int ], :pointer
+  attach_function :encodingName, [ :uint, :pointer, :int ], :pointer
   attach_function :rfbStatLookupEncoding, [ :pointer, :uint ], :pointer
   attach_function :rfbStatLookupMessage, [ :pointer, :uint ], :pointer
   attach_function :rfbStatRecordEncodingSent, [ :pointer, :uint, :int, :int ], :void
@@ -1285,7 +1285,7 @@ module FfiRfb
   attach_function :rfbStatGetEncodingCountSent, [ :pointer, :uint ], :int
   attach_function :rfbStatGetEncodingCountRcvd, [ :pointer, :uint ], :int
   attach_function :rfbSetProtocolVersion, [ :pointer, :int, :int ], :void
-  attach_function :rfbSendTextChatMessage, [ :pointer, :uint, :string ], :char
+  attach_function :rfbSendTextChatMessage, [ :pointer, :uint, :pointer ], :char
   attach_function :rfbProcessNewConnection, [ :pointer ], :char
   attach_function :rfbUpdateClient, [ :pointer ], :char
 end

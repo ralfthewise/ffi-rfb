@@ -59,7 +59,8 @@ module FfiRfb
     EOF
     file << head
 
-    file << parser.generate(Nokogiri::XML(File.open('./swig-build/rfb.xml')))
+    wrapped_rfb = parser.generate(Nokogiri::XML(File.open('./swig-build/rfb.xml')))
+    file << wrapped_rfb.gsub(/:string(\W)/, ':pointer\1') #replace all char* with void*
 
     tail = <<-EOF
 end
